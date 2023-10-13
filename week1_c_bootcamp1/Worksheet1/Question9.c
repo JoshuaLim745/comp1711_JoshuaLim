@@ -11,6 +11,4 @@ void main(){
     printf("The light will travel %f\n" , DistanceTravelled);
 
 
-
-
 }

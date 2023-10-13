@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+void main(){
+    int counter = 0
+    for (counter = 0; counter < 5; counter++)
+
+    {
+        printf("counter is equal to &d\n" , counter);
+    }
+
+    printf("I have finished the loop and counter is equal to %d\n", counter);
+
+
+}

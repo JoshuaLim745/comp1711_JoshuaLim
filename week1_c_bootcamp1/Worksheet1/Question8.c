@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 void main(){
+    /* Factorial*/
     int i, Userinput, result = 1;
 
     scanf("%d\n", &Userinput);
