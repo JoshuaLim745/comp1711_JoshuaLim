@@ -2,14 +2,14 @@
 
 void main(){
     int UserNumber, squared;
-    char filename []= "Sqaures.dat";
+    char filename []= "Squares.dat";
 
     FILE *file = fopen(filename,"w");
-    printf("Please enter a number between 10 and 20");
-    scanf("%d\n", &UserNumber);
-    for (int i ; i < UserNumber; i++){
+    printf("Please enter a number between 10 and 20\n");
+    scanf("%d", &UserNumber);
+    for (int i = 0 ; i <= UserNumber; i++){
         squared = i * i;
-        printf("%d\n", squared);
+        fprintf(file, "%d\n", squared);
     }
 
 
