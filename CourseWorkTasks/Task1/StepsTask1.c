@@ -38,7 +38,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
     
     // Free the duplicated string
     free(inputCopy);
-    printf("%s\n", time);
+
 }
 
 // Complete the main function
@@ -55,9 +55,15 @@ int main() {
     char filename [] = "FitnessData_2023.csv";
     FILE *file = fopen(filename, "r");
     char date[11], time[6], steps[4];
-	int buffer_size = 1000, i = 0;
+    int buffer_size = 1000, i = 0;
     char line [30] = {};
     FITNESS_DATA FitnessData[buffer_size];
+    
+    if (file == NULL){
+        perror("");
+        return 1;
+    }
+    
 
     while (fgets(line, 24, file) != NULL) {
         for (int i = 0; i < 24; i++)
@@ -70,7 +76,7 @@ int main() {
 
         tokeniseRecord(line, ",", date, time, steps);
         
-        //printf("%s\n",time);
+ 
         strcpy(FitnessData[i].date , date);
         strcpy(FitnessData[i].time , time);
         FitnessData[i].steps = atoi(steps);
@@ -80,7 +86,7 @@ int main() {
     };
 
     printf("Number of records in file: %d\n", i);
-    for (int j = 0; j <i; j++)
+    for (int j = 0; j <3; j++)
         printf("%s/%s/%d\n", FitnessData[j].date, FitnessData[j].time,FitnessData[j].steps);
 
 
