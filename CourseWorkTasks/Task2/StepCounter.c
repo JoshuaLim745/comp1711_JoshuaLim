@@ -37,15 +37,47 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
                     }
 
+FILE* FileReading(){
+    char UserEnteredFileName[20];
+    printf("Input Filename: ");
+    scanf("%s", UserEnteredFileName);
 
+    FILE *file = fopen(UserEnteredFileName, "r");
+    char date[11], time[6], steps[4];
+    int buffer_size = 1000, i = 0;
+    char line [30] = {};
+            
+    if (file == NULL){
+        perror("Error: Could not find or open the file.");
+
+    }
+    else {
+        printf("File successfully loaded.\n");
+    }
+
+    return file;
+}
+
+int DisplayTotalRecords(){
+    FILE *file = FileReading();
+    char Linereader[100] = "aaa";
+    int counter = 0;
+
+
+    while (Linereader != NULL){
+        fgets(Linereader, 20, file);
+        counter += 1;
+    }
+    return counter;
+}
 
 
 // Complete the main function
 int main() {
-   char *UserValue = 'F', *PreferredValue = "ABCDEFQ"; 
-   char UserEnteredFileName[100] = {'\0'}; 
+   char UserValue = 'F' , *PreferredValue = "ABCDEFQ"; 
+   char DoesFileexist;
 
-    while (strspn(PreferredValue, UserValue) == *UserValue){
+    while (strchr(PreferredValue, UserValue) != NULL){
         printf("Menu Options:\n");
         printf("A: Specify the filename to be imported\n");
         printf("B: Display the total number of records in the file\n");
@@ -57,59 +89,56 @@ int main() {
 
         printf("Enter choice: ");
 
-        scanf("%c\n", UserValue);
+        scanf(" %c", &UserValue);
 
-        switch (*UserValue)
+        switch (UserValue)
         {
         case 'A':
-            printf("Please enter the file name to be imported. \n");
-            scanf("%s\n", UserEnteredFileName);
-
-            FILE *file = fopen(UserEnteredFileName, "r");
-            char date[11], time[6], steps[4];
-            int buffer_size = 1000, i = 0;
-            char line [30] = {};
-            
-            if (file == NULL){
-                perror("Error: Could not find or open the file.");
-                return 1;
-            }
-
+        case'a':
+            FileReading();
+            printf("\n");
             break;
 
         case 'B':
-            
+        case 'b':
+            DisplayTotalRecords();
             break;
 
         case 'C':
+        case 'c':
             
             break;
 
         case 'D':
+        case 'd':
             
             break;
 
         case 'E':
+        case 'e':
             
             break;
 
         case 'F':
+        case 'f':
             
             break;
 
         case 'Q':
+        case 'q':
             return 1;
             break;
         
         default:
+            printf("\n");
             printf("Invalid choice. Try again.\n");
         
             break;
         }
    
+    }
    
-   
-   return 1;
+    return 1;
 
-}}
+}
 
