@@ -86,7 +86,7 @@ int main() {
     };
 
     printf("Number of records in file: %d\n", i);
-    for (int j = 0; j <3; j++)
+    for (int j = 0; j <60; j++)
         printf("%s/%s/%d\n", FitnessData[j].date, FitnessData[j].time,FitnessData[j].steps);
 
 

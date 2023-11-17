@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "FitnessDataStruct.h"
+
 
 // Struct moved to header file
 
 // Define any additional variables here
 // Global variables for filename and FITNESS_DATA array
+char UserEnteredFileName[20];
+FITNESS_DATA FitnessData[60];
 
 
 // This is your helper function. Do not change it in any way.
@@ -37,44 +41,112 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
                     }
 
-FILE* FileReading(){
-    char UserEnteredFileName[20];
-    printf("Input Filename: ");
-    scanf("%s", UserEnteredFileName);
+int FileReading(char UserEnteredFileName[20]){
 
     FILE *file = fopen(UserEnteredFileName, "r");
-    char date[11], time[6], steps[4];
-    int buffer_size = 1000, i = 0;
-    char line [30] = {};
+    char date[11], time[6], steps[10];
+    int buffer_size = 1000, counter = 0;
+    char Linereader[30] = {};
+    int Loaded = 0;
             
     if (file == NULL){
         perror("Error: Could not find or open the file.");
+        exit(1);
 
     }
     else {
         printf("File successfully loaded.\n");
+        Loaded = 1;
     }
 
-    return file;
+    if (Loaded == 1){
+        //Inspired from my CourseWork 1 "StepsTask1.c"
+        while (fgets(Linereader, 24, file) != NULL){
+
+        tokeniseRecord(Linereader, ",", date, time, steps);
+        
+ 
+        strcpy(FitnessData[counter].date , date);
+        strcpy(FitnessData[counter].time , time);
+        FitnessData[counter].steps = atoi(steps);
+
+        counter++;
+
+        }
+    }
+
+    else{
+        return 1;
+    }
 }
 
-int DisplayTotalRecords(){
-    FILE *file = FileReading();
-    char Linereader[100] = "aaa";
+void DisplayTotalRecords(){
+
+    FILE *file = fopen(UserEnteredFileName, "r");
+    char Linereader[30] = {};
     int counter = 0;
 
+    while (fgets(Linereader, 24, file) != NULL) {
 
-    while (Linereader != NULL){
-        fgets(Linereader, 20, file);
+        counter += 1;
+    };
+
+    printf("Total Records: %d\n", counter);
+} 
+
+void FewestSteps(){
+    int LowestSteps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
+
+    while (counter < 59){
+
+        if (FitnessData[counter].steps < LowestSteps){
+            LowestSteps = FitnessData[counter].steps;
+            Recordedcounter = counter;
+        }
+
         counter += 1;
     }
-    return counter;
+
+    printf("Fewest Steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
+}
+
+void LargestSteps(){
+    int LargestSteps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
+
+    while (counter < 59){
+        
+        if (FitnessData[counter].steps > LargestSteps){
+            LargestSteps = FitnessData[counter].steps;
+            Recordedcounter = counter;
+        }
+
+        counter ++;
+    }
+
+    printf("Largest Steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
+}
+
+
+void Mean(){
+    float Total = 0 , mean = 0, SizeOfArray = 59;
+    int FinalValue = 0;
+    
+    for (int i = 0; i < 59; i++){
+
+        Total = Total + FitnessData[i].steps;
+    }
+
+    mean = Total / SizeOfArray;
+
+    FinalValue = round(mean);
+
+    printf("Mean step count: %d", FinalValue);
 }
 
 
 // Complete the main function
 int main() {
-   char UserValue = 'F' , *PreferredValue = "ABCDEFQ"; 
+   char UserValue = 'F' , *PreferredValue = "ABCDEFQabcdefq"; 
    char DoesFileexist;
 
     while (strchr(PreferredValue, UserValue) != NULL){
@@ -91,42 +163,55 @@ int main() {
 
         scanf(" %c", &UserValue);
 
+
         switch (UserValue)
         {
         case 'A':
-        case'a':
-            FileReading();
+        case 'a':
+
+            printf("Input Filename: ");
+            scanf("%s", UserEnteredFileName);
+
+            FileReading(UserEnteredFileName);
             printf("\n");
             break;
 
         case 'B':
         case 'b':
             DisplayTotalRecords();
+            printf("\n");
             break;
 
         case 'C':
         case 'c':
             
+            FewestSteps();
+            printf("\n");
             break;
 
         case 'D':
         case 'd':
             
+            LargestSteps();
+            printf("\n");
             break;
 
         case 'E':
         case 'e':
             
+            printf("\n");
             break;
 
         case 'F':
         case 'f':
             
+            printf("\n");
             break;
 
         case 'Q':
         case 'q':
-            return 1;
+
+            return 0;
             break;
         
         default:
