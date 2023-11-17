@@ -127,7 +127,7 @@ void LargestSteps(){
 }
 
 
-void Mean(){
+int Meanvalue(){
     float Total = 0 , mean = 0, SizeOfArray = 59;
     int FinalValue = 0;
     
@@ -138,9 +138,24 @@ void Mean(){
 
     mean = Total / SizeOfArray;
 
-    FinalValue = round(mean);
+    return mean;
 
-    printf("Mean step count: %d", FinalValue);
+    
+}
+
+void LongestContinousPeriod(){
+    int StartCounter = 0, EndCounter = 0, CurrentCounter = 0;
+
+    while (CurrentCounter < 59) {
+
+        if (FitnessData[CurrentCounter].steps >= 500){
+            StartCounter = CurrentCounter;
+        }
+
+
+
+        CurrentCounter++;
+    }
 }
 
 
@@ -148,6 +163,7 @@ void Mean(){
 int main() {
    char UserValue = 'F' , *PreferredValue = "ABCDEFQabcdefq"; 
    char DoesFileexist;
+   int meanvalue = 0;
 
     while (strchr(PreferredValue, UserValue) != NULL){
         printf("Menu Options:\n");
@@ -199,6 +215,8 @@ int main() {
         case 'E':
         case 'e':
             
+            meanvalue = Meanvalue();
+            printf("Mean step count: %d", meanvalue);
             printf("\n");
             break;
 
