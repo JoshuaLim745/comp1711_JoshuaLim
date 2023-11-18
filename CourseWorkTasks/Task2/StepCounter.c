@@ -91,7 +91,7 @@ void DisplayTotalRecords(){
         counter += 1;
     };
 
-    printf("Total Records: %d\n", counter);
+    printf("Total Records: %d \n", counter);
 } 
 
 void FewestSteps(){
@@ -144,18 +144,46 @@ int Meanvalue(){
 }
 
 void LongestContinousPeriod(){
-    int StartCounter = 0, EndCounter = 0, CurrentCounter = 0;
+    int StartCounter = 0, EndCounter = 0, CurrentCounter = 0, i=0, LongestperiodCounter =0, FinalStart =0, FinalEnd = 0;
+    char Larger ='T';
 
-    while (CurrentCounter < 59) {
+    for(CurrentCounter =0; CurrentCounter < 59 ; CurrentCounter++) {
+        
 
         if (FitnessData[CurrentCounter].steps >= 500){
             StartCounter = CurrentCounter;
+            i = CurrentCounter;
+            Larger = 'T';
+
+            while (Larger == 'T'){
+                i++;
+                if (FitnessData[i].steps >= 500){
+                    EndCounter = i;
+                }
+                else{
+                    Larger = 'F';
+                }
+            }
+            
+        }
+
+
+        if (LongestperiodCounter < (EndCounter - StartCounter)){
+            FinalStart = StartCounter;
+            FinalEnd = EndCounter;
+            LongestperiodCounter = (EndCounter - StartCounter);
         }
 
 
 
-        CurrentCounter++;
+        if (CurrentCounter < EndCounter){
+            CurrentCounter = EndCounter;
+        }
+
+    
     }
+    printf("Longest period start: %s %s \n", FitnessData[FinalStart].date, FitnessData[FinalStart].time);
+    printf("Longest period end: %s %s \n", FitnessData[FinalEnd].date, FitnessData[FinalEnd].time);
 }
 
 
@@ -189,27 +217,27 @@ int main() {
             scanf("%s", UserEnteredFileName);
 
             FileReading(UserEnteredFileName);
-            printf("\n");
+
             break;
 
         case 'B':
         case 'b':
             DisplayTotalRecords();
-            printf("\n");
+
             break;
 
         case 'C':
         case 'c':
             
             FewestSteps();
-            printf("\n");
+
             break;
 
         case 'D':
         case 'd':
             
             LargestSteps();
-            printf("\n");
+
             break;
 
         case 'E':
@@ -217,13 +245,13 @@ int main() {
             
             meanvalue = Meanvalue();
             printf("Mean step count: %d", meanvalue);
-            printf("\n");
+
             break;
 
         case 'F':
         case 'f':
-            
-            printf("\n");
+            LongestContinousPeriod();
+
             break;
 
         case 'Q':
