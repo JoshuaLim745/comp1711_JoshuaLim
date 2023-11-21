@@ -93,7 +93,7 @@ void DisplayTotalRecords(){
     printf("Total records: %d \n", counter);
 } 
 
-int FewestSteps(){
+void FewestSteps(){
     int Feweststeps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
 
     while (counter < 59){
@@ -105,7 +105,7 @@ int FewestSteps(){
 
         counter ++;
     }
-    return Recordedcounter;
+    printf("Fewest steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
     
 }
 
@@ -144,8 +144,6 @@ int Meanvalue(){
         FinalValue++;
     }
 
-
-
     return FinalValue;
 
     
@@ -165,7 +163,7 @@ void LongestContinousPeriod(){
 
             while (Larger == 'T'){
                 i++;
-                if (FitnessData[i].steps >= 500){
+                if (FitnessData[i].steps > 500){
                     EndCounter = i;
                 }
                 else{
@@ -219,7 +217,6 @@ int main() {
         switch (UserValue)
         {
         case 'A':
-        case 'a':
 
             printf("Input Filename: ");
             scanf("%s", UserEnteredFileName);
@@ -231,28 +228,25 @@ int main() {
             break;
 
         case 'B':
-        case 'b':
+ 
             DisplayTotalRecords();
 
             break;
 
         case 'C':
-        case 'c':
             
-            returnvalue = FewestSteps();
-            printf("Fewest steps: %s %s\n", FitnessData[returnvalue].date, FitnessData[returnvalue].time);
+            FewestSteps();
+            
 
             break;
 
         case 'D':
-        case 'd':
             
             LargestSteps();
 
             break;
 
         case 'E':
-        case 'e':
             
             printf("Mean step count: %i\n",(Meanvalue()));
 
@@ -260,19 +254,18 @@ int main() {
             break;
 
         case 'F':
-        case 'f':
+
             LongestContinousPeriod();
 
             break;
 
         case 'Q':
-        case 'q':
 
             return 0;
             break;
         
         default:
-            printf("\n");
+
             printf("Invalid choice. Try again.\n");
         
             break;
