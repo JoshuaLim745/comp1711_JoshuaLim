@@ -93,21 +93,22 @@ void DisplayTotalRecords(){
     printf("Total records: %d \n", counter);
 } 
 
-void FewestSteps(){
-    int LowestSteps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
+int FewestSteps(){
+    int Feweststeps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
 
     while (counter < 59){
-
-        if (FitnessData[counter].steps < LowestSteps){
-            LowestSteps = FitnessData[counter].steps;
+        
+        if (FitnessData[counter].steps < Feweststeps){
+            Feweststeps = FitnessData[counter].steps;
             Recordedcounter = counter;
         }
 
-        counter += 1;
+        counter ++;
     }
-
-    printf("Fewest steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
+    return Recordedcounter;
+    
 }
+
 
 void LargestSteps(){
     int LargestSteps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
@@ -127,7 +128,7 @@ void LargestSteps(){
 
 
 int Meanvalue(){
-    float Total = 0 , mean = 0, SizeOfArray = 59;
+    double Total = 0 , mean = 0, SizeOfArray = 59;
     int FinalValue = 0;
     
     for (int i = 0; i < 59; i++){
@@ -137,7 +138,15 @@ int Meanvalue(){
 
     mean = Total / SizeOfArray;
 
-    return mean;
+    FinalValue = (int)mean;
+
+    if ((mean - FinalValue) >= 0.5){
+        FinalValue++;
+    }
+
+
+
+    return FinalValue;
 
     
 }
@@ -230,7 +239,8 @@ int main() {
         case 'C':
         case 'c':
             
-            FewestSteps();
+            returnvalue = FewestSteps();
+            printf("Fewest steps: %s %s\n", FitnessData[returnvalue].date, FitnessData[returnvalue].time);
 
             break;
 
@@ -244,8 +254,8 @@ int main() {
         case 'E':
         case 'e':
             
-            meanvalue = Meanvalue();
-            printf("Mean step count: %d\n", meanvalue);
+            printf("Mean step count: %i\n",(Meanvalue()));
+
 
             break;
 
@@ -270,7 +280,7 @@ int main() {
    
     }
    
-    return 1;
+    return 0;
 
 }
 
