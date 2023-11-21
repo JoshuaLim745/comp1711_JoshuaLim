@@ -4,7 +4,6 @@
 #include <math.h>
 #include "FitnessDataStruct.h"
 
-
 // Struct moved to header file
 
 // Define any additional variables here
@@ -43,15 +42,17 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 int FileReading(char UserEnteredFileName[20]){
 
-    FILE *file = fopen(UserEnteredFileName, "r");
+    FILE *file ;
     char date[11], time[6], steps[10];
     int buffer_size = 1000, counter = 0;
     char Linereader[30] = {};
     int Loaded = 0;
             
-    if (file == NULL){
-        perror("Error: Could not find or open the file.");
-        exit(1);
+    if ((file = fopen(UserEnteredFileName, "r")) == NULL){
+        printf("Error: Could not find or open the file.\n");
+        return 1;
+        
+
 
     }
     else {
@@ -75,9 +76,7 @@ int FileReading(char UserEnteredFileName[20]){
         }
     }
 
-    else{
-        return 1;
-    }
+    return 0;
 }
 
 void DisplayTotalRecords(){
@@ -91,7 +90,7 @@ void DisplayTotalRecords(){
         counter += 1;
     };
 
-    printf("Total Records: %d \n", counter);
+    printf("Total records: %d \n", counter);
 } 
 
 void FewestSteps(){
@@ -107,7 +106,7 @@ void FewestSteps(){
         counter += 1;
     }
 
-    printf("Fewest Steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
+    printf("Fewest steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
 }
 
 void LargestSteps(){
@@ -123,7 +122,7 @@ void LargestSteps(){
         counter ++;
     }
 
-    printf("Largest Steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
+    printf("Largest steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
 }
 
 
@@ -191,7 +190,7 @@ void LongestContinousPeriod(){
 int main() {
    char UserValue = 'F' , *PreferredValue = "ABCDEFQabcdefq"; 
    char DoesFileexist;
-   int meanvalue = 0;
+   int meanvalue = 0, returnvalue = 0;
 
     while (strchr(PreferredValue, UserValue) != NULL){
         printf("Menu Options:\n");
@@ -216,8 +215,10 @@ int main() {
             printf("Input Filename: ");
             scanf("%s", UserEnteredFileName);
 
-            FileReading(UserEnteredFileName);
-
+            returnvalue = FileReading(UserEnteredFileName);
+            if (returnvalue == 1){
+                return 1;
+            }
             break;
 
         case 'B':
@@ -244,7 +245,7 @@ int main() {
         case 'e':
             
             meanvalue = Meanvalue();
-            printf("Mean step count: %d", meanvalue);
+            printf("Mean step count: %d\n", meanvalue);
 
             break;
 
