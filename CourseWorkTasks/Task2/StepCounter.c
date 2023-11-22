@@ -93,37 +93,36 @@ void DisplayTotalRecords(){
     printf("Total records: %d \n", counter);
 } 
 
-void FewestSteps(){
-    int Feweststeps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
+int FewestSteps(){
+    int Feweststeps = 9999999, counter = 0, Recordedcounter = 0;
 
-    while (counter < 59){
+    for (counter; counter < 59; counter++ ){
         
         if (FitnessData[counter].steps < Feweststeps){
             Feweststeps = FitnessData[counter].steps;
             Recordedcounter = counter;
         }
 
-        counter ++;
     }
-    printf("Fewest steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
+
+    return Recordedcounter;
     
 }
 
 
-void LargestSteps(){
-    int LargestSteps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
+int LargestSteps(){
+    int LargestSteps = 0, counter = 0, Recordedcounter = 0;
 
-    while (counter < 59){
+    for (counter; counter < 59; counter++ ){
         
         if (FitnessData[counter].steps > LargestSteps){
             LargestSteps = FitnessData[counter].steps;
             Recordedcounter = counter;
         }
 
-        counter ++;
     }
 
-    printf("Largest steps: %s %s\n", FitnessData[Recordedcounter].date, FitnessData[Recordedcounter].time);
+    return Recordedcounter;
 }
 
 
@@ -131,7 +130,7 @@ int Meanvalue(){
     double Total = 0 , mean = 0, SizeOfArray = 59;
     int FinalValue = 0;
     
-    for (int i = 0; i < 59; i++){
+    for (int i = 0; i < 60; i++){
 
         Total = Total + FitnessData[i].steps;
     }
@@ -153,7 +152,7 @@ void LongestContinousPeriod(){
     int StartCounter = 0, EndCounter = 0, CurrentCounter = 0, i=0, LongestperiodCounter =0, FinalStart =0, FinalEnd = 0;
     char Larger ='T';
 
-    for(CurrentCounter =0; CurrentCounter < 59 ; CurrentCounter++) {
+    for(CurrentCounter = 0; CurrentCounter < 59 ; CurrentCounter++) {
         
 
         if (FitnessData[CurrentCounter].steps >= 500){
@@ -235,20 +234,22 @@ int main() {
 
         case 'C':
             
-            FewestSteps();
+            returnvalue = FewestSteps();
+            printf("Fewest steps: %s %s\n", FitnessData[returnvalue].date, FitnessData[returnvalue].time);
             
 
             break;
 
         case 'D':
             
-            LargestSteps();
+             returnvalue = LargestSteps();
+             printf("Largest steps: %s %s\n", FitnessData[returnvalue].date, FitnessData[returnvalue].time);
 
             break;
 
         case 'E':
-            
-            printf("Mean step count: %i\n",(Meanvalue()));
+            meanvalue = Meanvalue();
+            printf("Mean step count: %d\n",meanvalue);
 
 
             break;
