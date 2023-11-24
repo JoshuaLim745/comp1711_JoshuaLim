@@ -8,9 +8,9 @@
 
 // Define any additional variables here
 // Global variables for filename and FITNESS_DATA array
-char UserEnteredFileName[20];
-FITNESS_DATA FitnessData[60];
 
+FITNESS_DATA FitnessData[1000];
+char UserEnteredFileName[20];
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -42,28 +42,31 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 int FileReading(char UserEnteredFileName[20]){
 
-    FILE *file ;
-    char date[11], time[6], steps[10];
+    FILE *file;
     int buffer_size = 1000, counter = 0;
     char Linereader[30] = {};
-    int Loaded = 0;
+    int DoesntExist = 1;
             
     if ((file = fopen(UserEnteredFileName, "r")) == NULL){
         printf("Error: Could not find or open the file.\n");
-        return 1;
         
-
-
     }
     else {
         printf("File successfully loaded.\n");
-        Loaded = 1;
+        DoesntExist = 0;
     }
 
-    if (Loaded == 1){
-        //Inspired from my CourseWork 1 "StepsTask1.c"
-        while (fgets(Linereader, 24, file) != NULL){
 
+    return DoesntExist;
+}
+
+int DisplayTotalRecords(){
+
+    FILE *file = fopen(UserEnteredFileName, "r");
+    char Linereader[30] = {}, date[11], time[6], steps[10];
+    int counter = 0;
+
+    while (fgets(Linereader, 24, file) != NULL) {
         tokeniseRecord(Linereader, ",", date, time, steps);
         
  
@@ -72,31 +75,16 @@ int FileReading(char UserEnteredFileName[20]){
         FitnessData[counter].steps = atoi(steps);
 
         counter++;
-
-        }
-    }
-
-    return 0;
-}
-
-void DisplayTotalRecords(){
-
-    FILE *file = fopen(UserEnteredFileName, "r");
-    char Linereader[30] = {};
-    int counter = 0;
-
-    while (fgets(Linereader, 24, file) != NULL) {
-
-        counter += 1;
     };
 
-    printf("Total records: %d \n", counter);
+
+    return counter; 
 } 
 
-int FewestSteps(){
-    int Feweststeps = 9999999, counter = 0, Recordedcounter = 0;
+int FewestSteps(int NumberOfRecords){
+    int Feweststeps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
 
-    for (counter; counter < 59; counter++ ){
+    for (counter; counter < NumberOfRecords; counter++ ){
         
         if (FitnessData[counter].steps < Feweststeps){
             Feweststeps = FitnessData[counter].steps;
@@ -110,10 +98,10 @@ int FewestSteps(){
 }
 
 
-int LargestSteps(){
-    int LargestSteps = 0, counter = 0, Recordedcounter = 0;
+int LargestSteps(int NumberOfRecords){
+    int LargestSteps = FitnessData[0].steps, counter = 1, Recordedcounter = 0;
 
-    for (counter; counter < 59; counter++ ){
+    for (counter; counter < NumberOfRecords; counter++ ){
         
         if (FitnessData[counter].steps > LargestSteps){
             LargestSteps = FitnessData[counter].steps;
@@ -126,16 +114,16 @@ int LargestSteps(){
 }
 
 
-int Meanvalue(){
-    double Total = 0 , mean = 0, SizeOfArray = 59;
+int Meanvalue(int NumberOfRecords){
+    double Total = 0 , mean = 0;
     int FinalValue = 0;
     
-    for (int i = 0; i < 60; i++){
+    for (int i = 0; i < NumberOfRecords; i++){
 
         Total = Total + FitnessData[i].steps;
     }
 
-    mean = Total / SizeOfArray;
+    mean = Total / NumberOfRecords;
 
     FinalValue = (int)mean;
 
@@ -148,11 +136,11 @@ int Meanvalue(){
     
 }
 
-void LongestContinousPeriod(){
+void LongestContinousPeriod(int NumberOfRecords){
     int StartCounter = 0, EndCounter = 0, CurrentCounter = 0, i=0, LongestperiodCounter =0, FinalStart =0, FinalEnd = 0;
     char Larger ='T';
 
-    for(CurrentCounter = 0; CurrentCounter < 59 ; CurrentCounter++) {
+    for(CurrentCounter = 0; CurrentCounter < NumberOfRecords ; CurrentCounter++) {
         
 
         if (FitnessData[CurrentCounter].steps >= 500){
@@ -195,8 +183,11 @@ void LongestContinousPeriod(){
 // Complete the main function
 int main() {
    char UserValue = 'F' , *PreferredValue = "ABCDEFQabcdefq"; 
-   char DoesFileexist;
    int meanvalue = 0, returnvalue = 0;
+   int NumberOfRecords = 0;  
+   
+   FILE ReadFile; 
+     
 
     while (strchr(PreferredValue, UserValue) != NULL){
         printf("Menu Options:\n");
@@ -216,51 +207,60 @@ int main() {
         switch (UserValue)
         {
         case 'A':
+        case 'a':
 
             printf("Input Filename: ");
             scanf("%s", UserEnteredFileName);
 
             returnvalue = FileReading(UserEnteredFileName);
+
             if (returnvalue == 1){
                 return 1;
             }
             break;
 
         case 'B':
- 
-            DisplayTotalRecords();
+        case 'b':
+            NumberOfRecords = DisplayTotalRecords();
+            printf("Total records: %d\n", NumberOfRecords);
 
             break;
 
         case 'C':
+        case 'c':
             
-            returnvalue = FewestSteps();
+            returnvalue = FewestSteps(NumberOfRecords);
             printf("Fewest steps: %s %s\n", FitnessData[returnvalue].date, FitnessData[returnvalue].time);
             
 
             break;
 
         case 'D':
+        case 'd':
             
-             returnvalue = LargestSteps();
+             returnvalue = LargestSteps(NumberOfRecords);
              printf("Largest steps: %s %s\n", FitnessData[returnvalue].date, FitnessData[returnvalue].time);
 
             break;
 
         case 'E':
-            meanvalue = Meanvalue();
+        case 'e':
+
+            meanvalue = Meanvalue(NumberOfRecords);
             printf("Mean step count: %d\n",meanvalue);
 
 
             break;
 
         case 'F':
+        case 'f':
 
-            LongestContinousPeriod();
+            LongestContinousPeriod(NumberOfRecords);
 
             break;
 
         case 'Q':
+        case 'q':
 
             return 0;
             break;
