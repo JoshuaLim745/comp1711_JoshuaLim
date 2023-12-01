@@ -49,8 +49,8 @@ int main() {
     
     */
 
-    char Filename[100];
-    FILE *file;
+    char Filename[100], TsvFilename[100];
+    FILE *file, *TsvFile;
 
     FitnessData FitnessArray[1000];
     char date[11], time[6], Linereader[30] = {}, TempTime[6], TempDate [11];
@@ -64,19 +64,24 @@ int main() {
 
     
     if((file = fopen(Filename,"r")) == NULL){
-        printf("Error: invalid file");
+        printf("Error: invalid file\n");
         return 1;
 
     }
 
     while(fgets(Linereader,24,file) != NULL){
 
-        if (strlen(Linereader)!= 24){
-            printf("Error: invalid file\n ");
+        if (strlen(Linereader) < 18){
+            printf("Error: invalid file\n");
             return 1;
         }
 
         tokeniseRecord(Linereader, ',',date, time, pointer);
+
+        if((date == NULL)||(time == NULL)||(*pointer <= 0 )){
+            printf("Error: invalid file\n");
+            return 1;
+        }
 
 
         strcpy(FitnessArray[counter].date , date);
@@ -106,18 +111,18 @@ int main() {
         strcpy(FitnessArray[j + 1].time, TempTime);
     }
 
+    strcpy(TsvFilename,Filename);
+    strcat(TsvFilename,".tsv");
+    TsvFile = fopen(TsvFilename,"w");
 
     for(int i = 0 ; i< counter; i++){
-        printf("%s\t%s\t%d\n", FitnessArray[i].date, FitnessArray[i].time, FitnessArray[i].steps);
+        fprintf(TsvFile,"%s\t%s\t%d\n", FitnessArray[i].date, FitnessArray[i].time, FitnessArray[i].steps);
     }
 
 
-
-    
-
-
-
+    printf("Data sorted and written to FitnessData_2023.csv.tsv\n");
 
     fclose(file);
+    fclose(TsvFile);
     return 0;
 }
