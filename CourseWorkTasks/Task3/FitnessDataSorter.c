@@ -50,26 +50,48 @@ int main() {
     */
 
    char Filename[100];
+   FILE *file;
 
    FitnessData FitnessArray[1000];
-   char date[11], time[6];
-   int steps = 0;
+   char date[11], time[6], Linereader[100];
+
+   int steps = 0, counter = 0;
+   int *pointer = &steps;
 
    
     scanf("Enter Filename: %s\n", Filename);
-
-    if(fopen(Filename,"r") == NULL){
+    
+    if((file = fopen(Filename,"r")) == NULL){
         printf("Error: invalid file");
         return 1;
 
     }
 
-    tokeniseRecord(FitnessArray, ",",date,time,steps);
+    while(fgets(Linereader,24,file) != NULL)
+
+        tokeniseRecord(Linereader, ',',date, time, pointer);
+
+        if ((date == "")||(time == "")||(*pointer == "")){
+            printf("Error: invalid file");
+            return 1;
+        }
+
+        strcpy(FitnessArray[counter].date , date);
+        strcpy(FitnessArray[counter].time , time);
+        FitnessArray[counter].steps = *pointer;
+
+        counter++;
+
+    
+    for(int i = 0; i < counter; i++){
+        printf("%s %s %d \n",FitnessArray[i].date, FitnessArray[i].time, FitnessArray[i].steps);
+    }
+
     
 
 
 
 
-    fclose(Filename);
+    fclose(file);
     return 0;
 }
